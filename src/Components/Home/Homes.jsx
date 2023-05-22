@@ -11,6 +11,7 @@ import { AiOutlineInstagram } from "react-icons/ai";
 import { SiTripadvisor } from "react-icons/si";
 import { BsListTask } from "react-icons/bs";
 import { TbApps } from "react-icons/tb";
+import PriceInput from "./PriceInput";
 
 import Aos from "aos";
 import "aos/dist/aos.css";
@@ -23,6 +24,10 @@ const Homes = () => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [countryNames, setCountryNames] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDays, setSelectedDays] = useState("");
+  const [isSearchEnabled, setIsSearchEnabled] = useState(false);
+  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
 
   useEffect(() => {
     axios
@@ -49,6 +54,29 @@ const Homes = () => {
   };
 
   const renderSuggestion = (suggestion) => <div>{suggestion}</div>;
+  const [selectedPrice, setSelectedPrice] = useState(null);
+
+  const handlePriceChange = (price) => {
+    setSelectedPrice(price);
+  };
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const handleDaysChange = (e) => {
+    setSelectedDays(e.target.value);
+  };
+
+  useEffect(() => {
+    setIsSearchEnabled(
+      value !== "" && selectedDate !== "" && selectedDays !== ""
+    );
+  }, [value, selectedDate, selectedDays]);
+
+  useEffect(() => {
+    setIsSearchButtonDisabled(!(value && selectedDate && selectedDays));
+  }, [value, selectedDate, selectedDays]);
 
   return (
     <section className="home">
@@ -89,33 +117,46 @@ const Homes = () => {
           <div className="dateInput">
             <label htmlFor="date">Travel Date</label>
             <div className="input flex">
-              <input type="date" />
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
             </div>
           </div>
 
           <div className="daysInput">
             <label htmlFor="date">Number of Days</label>
             <div className="input flex">
-              <input type="number" />
+              <input
+                type="number"
+                value={selectedDays}
+                onChange={handleDaysChange}
+              />
             </div>
           </div>
 
           <div className="priceInput">
-            <div className="label_total flex">
+            {/* <div className="label_total flex">
               <label htmlFor="price">Your Budget &nbsp;</label>
               <h3 className="total">$5000</h3>
-            </div>
-            <div className="input flex">
+            </div> */}
+            {/* <div className="input flex">
               <input type="range" max="5000" min="1000" />
-            </div>
+            </div> */}
+            <PriceInput onPriceChange={handlePriceChange} />
           </div>
           <div className="searchOptions flex">
-            <Link to="/search">
-              <div className="searchOptions flex">
-                <FiSearch className="icon" />
-                <span>Search </span>
-              </div>
-            </Link>
+            {isSearchButtonDisabled ? (
+              <div className="disabledSearch">Please fill in the details.</div>
+            ) : (
+              <Link to="/search">
+                <div className="searchOptions flex">
+                  <FiSearch className="icon" />
+                  <span>Search</span>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
 

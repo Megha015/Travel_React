@@ -109,7 +109,7 @@ const Main = () => {
                     <div className="grade">
                       <span>
                         {grade}
-                        <small>+1</small>
+                        {/* <small>+1</small> */}
                       </span>
                     </div>
                     <div className="price">
@@ -120,10 +120,10 @@ const Main = () => {
                     <p>{description}</p>
                   </div>
 
-                  <button className="btn flex">
+                  {/* <button className="btn flex">
                     Details
                     <HiOutlineClipboardCheck className="icon" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             );
